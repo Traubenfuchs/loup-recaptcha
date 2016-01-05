@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Recaptcha Test</title>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<script>
+	"use strict";
+	function tryReCaptcha() {
+		document.getElementById('submitCaptchaButton').disabled = true;
+		document.getElementById('info').innerHTML = "";
+		document.getElementById('error').innerHTML = "";
+		document.getElementById('inProgress').style.display = '';
+
+		var reCaptchaResponse = grecaptcha.getResponse();
+
+		var request = new XMLHttpRequest();
+		request.open("POST", "/recaptcha-test");
+		request.setRequestHeader('recaptcha-response', reCaptchaResponse)
+
+		var treatResponse = function treatResponse() {
+			if (request.status == 200) {
+				document.getElementById('info').innerHTML = request.responseText;
+			} else if (request.status == 409) {
+				document.getElementById('error').innerHTML = "incorrect recaptcha value!";
+			} else {
+				document.getElementById('error').innerHTML = "error, statuscode: "
+						+ request.status;
+			}
+			document.getElementById('inProgress').style.display = 'none';
+			document.getElementById('submitCaptchaButton').disabled = false;
+			grecaptcha.reset();
+		};
+
+		request.onerror = treatResponse;
+		request.onload = treatResponse;
+
+		request.send();
+	}
+</script>
+</head>
+<body>
+	<h1>Recaptcha Tester</h1>
+	<form>
+		<div class="g-recaptcha" th:attr="data-sitekey=${reCaptchaSiteKey}"></div>
+		<button id='submitCaptchaButton' type='button' onclick='tryReCaptcha()'>send</button>
+		<p id='inProgress' style='display: none;'>IN PROGRESS</p>
+	</form>
+	<h1 id='info' style='color: green;'></h1>
+	<h1 id='error' style='color: red;'></h1>
+</body>
+</html>
