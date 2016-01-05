@@ -4,7 +4,7 @@
 	<groupId>at.loup</groupId>
 	<artifactId>loup-recaptcha</artifactId>
 	<version>0.0.1</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<name>loup-recaptcha</name>
 	<description>Spring aspect for enforcing the successful passing of Google reCaptcha before executing a method</description>
 	<parent>
