@@ -14,7 +14,7 @@
 		var reCaptchaResponse = grecaptcha.getResponse();
 
 		var request = new XMLHttpRequest();
-		request.open("POST", "/recaptcha-test");
+		request.open("POST", "recaptcha-test");
 		request.setRequestHeader('recaptcha-response', reCaptchaResponse)
 
 		var treatResponse = function treatResponse() {
